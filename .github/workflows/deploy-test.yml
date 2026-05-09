@@ -1,0 +1,41 @@
+name: Package Test
+
+on:
+    workflow_dispatch:
+        inputs:
+            branch:
+                description: 'Branch to package (e.g. feature/foo, hotfix/bar)'
+                required: true
+                type: string
+
+concurrency:
+    group: deploy-test
+    cancel-in-progress: false
+
+jobs:
+    package:
+        name: package-test
+        runs-on: [self-hosted, smolla-contracts]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ inputs.branch }}
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+
+            - name: Pack .NET (NuGet, branch suffix)
+              run: dotnet pack --configuration Release --version-suffix "branch-${{ github.run_number }}" --output ./artifacts
+              working-directory: dotnet
+
+            - name: Build TypeScript
+              run: |
+                  npm install
+                  npm run build
+                  npm pack --pack-destination ./artifacts
+              working-directory: typescript
+
+            # Test-channel publishing left disabled pending registry secrets.

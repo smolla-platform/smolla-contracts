@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <RootNamespace>Smolla.Contracts</RootNamespace>
+        <AssemblyName>Smolla.Contracts</AssemblyName>
+        <PackageId>Smolla.Contracts</PackageId>
+        <Description>Shared domain event schemas and DTOs for Smolla services.</Description>
+    </PropertyGroup>
+
+</Project>

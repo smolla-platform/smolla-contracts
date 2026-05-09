@@ -1,0 +1,17 @@
+{
+    "name": "@smolla/contracts",
+    "private": false,
+    "version": "0.1.0",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": ["dist"],
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "type-check": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.5",
+        "typescript": "~5.7.3"
+    }
+}

@@ -1,0 +1,35 @@
+name: Package Staging
+
+on:
+    push:
+        branches: [develop]
+
+concurrency:
+    group: deploy-staging
+    cancel-in-progress: false
+
+jobs:
+    package:
+        name: package-staging
+        runs-on: [self-hosted, smolla-contracts]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+
+            - name: Pack .NET (NuGet, prerelease)
+              run: dotnet pack --configuration Release --version-suffix "preview-${{ github.run_number }}" --output ./artifacts
+              working-directory: dotnet
+
+            - name: Build TypeScript
+              run: |
+                  npm install
+                  npm run build
+                  npm pack --pack-destination ./artifacts
+              working-directory: typescript
+
+            # Publishing prerelease packages is left disabled pending registry secrets.

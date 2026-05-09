@@ -1,0 +1,36 @@
+name: Package Production
+
+on:
+    push:
+        branches: [main]
+
+concurrency:
+    group: deploy-prod
+    cancel-in-progress: false
+
+jobs:
+    package:
+        name: package-prod
+        runs-on: [self-hosted, smolla-contracts]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+
+            - name: Pack .NET (NuGet)
+              run: dotnet pack --configuration Release --output ./artifacts
+              working-directory: dotnet
+
+            - name: Build TypeScript
+              run: |
+                  npm install
+                  npm run build
+                  npm pack --pack-destination ./artifacts
+              working-directory: typescript
+
+            # Publishing to nuget.org and npm is left disabled until the
+            # registry credentials are wired in via secrets in smolla-infra.
