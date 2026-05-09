@@ -15,7 +15,7 @@ concurrency:
 jobs:
     package:
         name: package-test
-        runs-on: [self-hosted, smolla-contracts]
+        runs-on: [self-hosted, smolla-platform-runner]
         steps:
             - name: Checkout
               uses: actions/checkout@v4

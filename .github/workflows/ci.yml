@@ -13,7 +13,7 @@ concurrency:
 jobs:
     test:
         name: test
-        runs-on: [self-hosted, smolla-contracts]
+        runs-on: [self-hosted, smolla-platform-runner]
 
         steps:
             - name: Checkout
